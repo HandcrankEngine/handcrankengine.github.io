@@ -1,0 +1,7 @@
+CompileFlags:
+  CompilationDatabase: .
+Diagnostics:
+  UnusedIncludes: Strict
+  ClangTidy:
+    Add: [performance-*, modernize-*, readability-*]
+    Remove: [readability-identifier-length]

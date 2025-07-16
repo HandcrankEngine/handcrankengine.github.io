@@ -1,0 +1,6 @@
+*.md
+*.json
+*.txt
+
+demos/*/*.cpp
+demos/*/*.html
