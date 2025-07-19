@@ -11,8 +11,8 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica', 'Arial',
-    sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Helvetica', 'Arial', sans-serif;
   font-size: 1.3rem;
   line-height: 1.4;
   color: var(--main-foreground-color);
@@ -69,17 +69,16 @@ p > strong {
 }
 
 .download-buttons {
-  margin: 4rem 0;
+  margin: 4rem 0 0;
   padding: 1rem;
   display: flex;
-  flex-direction: column;
-  justify-content: space-around;
+  flex-direction: row;
   gap: 1rem;
-  text-align: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .download-button {
-  margin: 0 auto;
   display: inline-flex;
   gap: 0.5rem;
   align-items: center;
@@ -96,4 +95,11 @@ p > strong {
 .download-button:active {
   position: relative;
   top: 2px;
+}
+
+.current-version {
+  margin: 0 0 4rem;
+  font-size: 1rem;
+  color: #888;
+  text-align: center;
 }

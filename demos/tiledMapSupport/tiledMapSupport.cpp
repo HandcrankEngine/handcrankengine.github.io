@@ -21,8 +21,8 @@ class TileMap : public VertexRenderObject
     void Start() override
     {
         texture =
-            SDL_LoadTexture(game->GetRenderer(), images_tilemap_packed_png,
-                            images_tilemap_packed_png_len);
+            LoadCachedTexture(game->GetRenderer(), images_tilemap_packed_png,
+                              images_tilemap_packed_png_len);
 
         SDL_QueryTexture(texture, nullptr, nullptr, &textureWidth,
                          &textureHeight);
