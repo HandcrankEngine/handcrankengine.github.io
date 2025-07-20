@@ -68,11 +68,18 @@ export default html`<!DOCTYPE html>
     </head>
     <body>
       <main>
-        <div class="wrapper">
-          ${await renderMarkdown(
-            await readFile('./_includes/header.md', 'utf8')
-          )}
-        </div>
+        <header>
+          <div class="wrapper">
+            <img
+              src="./images/logo-rounded.svg"
+              alt="Handcrank Engine"
+              class="logo"
+            />
+            ${await renderMarkdown(
+              await readFile('./_includes/header.md', 'utf8')
+            )}
+          </div>
+        </header>
 
         ${await renderDemo('demo')}
         ${await renderDemoWithCode('drawRectRenderer')}
