@@ -1,7 +1,6 @@
 #include "tilemap_packed.h"
 
 #include "Handcrank/Handcrank.hpp"
-#include "Handcrank/ImageRenderObject.hpp"
 #include "Handcrank/Utilities.hpp"
 #include "Handcrank/VertexRenderObject.hpp"
 

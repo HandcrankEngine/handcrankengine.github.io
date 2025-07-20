@@ -15,10 +15,14 @@
     }
 
     pre {
-      margin: 2rem 0;
+      margin: 0;
       font-family: inherit;
       font-size: 1rem;
       background-color: var(--pre-background-color);
+    }
+
+    code {
+      max-height: var(--pre-max-height);
     }
 
     button {

@@ -11,8 +11,8 @@ html {
 }
 
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Helvetica', 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica', 'Arial',
+    sans-serif;
   font-size: 1.3rem;
   line-height: 1.4;
   color: var(--main-foreground-color);
@@ -54,18 +54,16 @@ video {
   max-width: 100%;
 }
 
-header,
-main,
-footer {
-  margin: 2rem auto;
-  padding: 2rem;
-  max-width: 50rem;
-}
-
 p > strong {
   padding: 0.25rem;
   color: #222;
   background-color: #ff7;
+}
+
+.wrapper:not(:empty) {
+  margin: 0 auto;
+  padding: 2rem;
+  max-width: 50rem;
 }
 
 .download-buttons {
