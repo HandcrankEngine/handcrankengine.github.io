@@ -11,8 +11,8 @@ html {
 }
 
 body {
-  font-family:
-    -apple-system, BlinkMacSystemFont, 'Helvetica', 'Arial', sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica', 'Arial',
+    sans-serif;
   font-size: 1.3rem;
   line-height: 1.4;
   color: var(--main-foreground-color);
@@ -51,6 +51,7 @@ a svg {
 
 blockquote {
   font-size: 2rem;
+  line-height: 1;
   text-align: center;
 }
 
