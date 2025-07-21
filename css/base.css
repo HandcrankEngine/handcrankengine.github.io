@@ -70,7 +70,7 @@ p > strong {
   margin: 8rem 0 4rem;
 }
 
-.wrapper:not(:empty) {
+.wrapper:has(*) {
   margin: 0 auto;
   padding: 2rem;
   max-width: 50rem;
