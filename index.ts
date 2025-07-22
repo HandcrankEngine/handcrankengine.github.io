@@ -70,11 +70,22 @@ export default html`<!DOCTYPE html>
       <main>
         <header>
           <div class="wrapper">
-            <img
-              src="./images/logo-rounded.svg"
-              alt="Handcrank Engine"
-              class="logo"
-            />
+            <picture>
+              <source
+                srcset="./images/logo-rounded-light.svg"
+                media="(prefers-color-scheme: light)"
+              />
+              <source
+                srcset="./images/logo-rounded-dark.svg"
+                media="(prefers-color-scheme: dark)"
+              />
+              <img
+                src="./images/logo-rounded-dark.svg"
+                class="logo"
+                alt="Handcrank Engine Logo"
+              />
+            </picture>
+
             ${await renderMarkdown(
               await readFile('./_includes/header.md', 'utf8')
             )}
