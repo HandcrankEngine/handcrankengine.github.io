@@ -36,7 +36,9 @@ const renderDemoWithCode = async (name: string) => {
     <div class="demo">
       <div class="demo-canvas">
         <canvas id="${name}" tabindex="-1" width="1000" height="600"></canvas>
-        <p class="demo-canvas-footer">This is live demo of the code snippet.</p>
+        <p class="demo-canvas-footer">
+          This is a live demo of the code snippet.
+        </p>
       </div>
 
       <copy-to-clipboard class="demo-code">
