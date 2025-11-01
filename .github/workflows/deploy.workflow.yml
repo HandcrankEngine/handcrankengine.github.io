@@ -15,14 +15,73 @@ concurrency:
   group: 'pages'
   cancel-in-progress: true
 
+env:
+  EMSDK_VERSION: 4.0.18
+
 jobs:
-  build:
+  build-emscripten:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v5
         with:
           fetch-depth: 0
+
+      - name: Cache Emscripten
+        id: cache-emscripten
+        uses: actions/cache@v4
+        with:
+          path: ./emsdk
+          key: ${{ runner.os }}-emsdk-${{ env.EMSDK_VERSION }}
+
+      - name: Install Emscripten
+        if: steps.cache-emscripten.outputs.cache-hit != 'true'
+        run: |
+          git clone https://github.com/emscripten-core/emsdk.git
+          cd ./emsdk
+          ./emsdk install ${{ env.EMSDK_VERSION }}
+          ./emsdk activate ${{ env.EMSDK_VERSION }}
+
+      - name: Install HandcrankEngine
+        run: |
+          git clone https://github.com/HandcrankEngine/HandcrankEngine.git
+
+      - name: Build WebGL
+        run: |
+          source ./emsdk/emsdk_env.sh
+          build-demo() {
+            NAME="${1}"
+            emcc -std=c++17 -Os -o "demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" \
+                -I./HandcrankEngine/include \
+                -s USE_SDL=2 -s USE_SDL_IMAGE=2 -s SDL2_IMAGE_FORMATS='["png"]' -s USE_SDL_TTF=2 -s USE_SDL_MIXER=2 \
+                -s MODULARIZE=1 -s EXPORT_NAME="${NAME}Module" --pre-js ./bin/sdl-mod.js
+          }
+          build-demo "demo"
+          build-demo "animation"
+          build-demo "drawRectRenderer"
+          build-demo "simpleEventLoop"
+          build-demo "spriteRenderer"
+          build-demo "tiledMapSupport"
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v5
+        with:
+          path: ./demos
+          overwrite: true
+
+  build-web:
+    runs-on: ubuntu-latest
+    needs: build-emscripten
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
+
+      - name: Download artifact
+        uses: actions/download-artifact@v6
+        with:
+          path: ./demos
 
       - name: Setup Node
         uses: actions/setup-node@v6
@@ -49,7 +108,7 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
+    needs: [build-emscripten, build-web]
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
