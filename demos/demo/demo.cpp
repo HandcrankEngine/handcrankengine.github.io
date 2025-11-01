@@ -1,9 +1,9 @@
 #include "./sdl_logo.h"
 
-#include "Handcrank/Handcrank.hpp"
-#include "Handcrank/ImageRenderObject.hpp"
+#include "HandcrankEngine/HandcrankEngine.hpp"
+#include "HandcrankEngine/ImageRenderObject.hpp"
 
-using namespace Handcrank;
+using namespace HandcrankEngine;
 
 class LogoScreenSaver : public ImageRenderObject
 {

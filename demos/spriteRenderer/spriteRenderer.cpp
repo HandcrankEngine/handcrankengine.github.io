@@ -1,9 +1,9 @@
 #include "alienGreen.h"
 
-#include "Handcrank/Handcrank.hpp"
-#include "Handcrank/SpriteRenderObject.hpp"
+#include "HandcrankEngine/HandcrankEngine.hpp"
+#include "HandcrankEngine/SpriteRenderObject.hpp"
 
-using namespace Handcrank;
+using namespace HandcrankEngine;
 
 class GreenAlien : public SpriteRenderObject
 {

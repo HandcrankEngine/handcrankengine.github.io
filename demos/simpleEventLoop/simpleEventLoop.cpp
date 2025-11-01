@@ -1,8 +1,8 @@
 #include <iostream>
 
-#include "Handcrank/Handcrank.hpp"
+#include "HandcrankEngine/HandcrankEngine.hpp"
 
-using namespace Handcrank;
+using namespace HandcrankEngine;
 
 class LoopDebugger : public RenderObject
 {

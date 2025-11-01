@@ -1,8 +1,8 @@
-#include "Handcrank/Animator.hpp"
-#include "Handcrank/Handcrank.hpp"
-#include "Handcrank/RectRenderObject.hpp"
+#include "HandcrankEngine/Animator.hpp"
+#include "HandcrankEngine/HandcrankEngine.hpp"
+#include "HandcrankEngine/RectRenderObject.hpp"
 
-using namespace Handcrank;
+using namespace HandcrankEngine;
 
 auto game = std::make_unique<Game>();
 

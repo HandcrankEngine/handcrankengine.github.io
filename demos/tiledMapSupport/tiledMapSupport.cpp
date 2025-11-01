@@ -1,10 +1,10 @@
 #include "tilemap_packed.h"
 
-#include "Handcrank/Handcrank.hpp"
-#include "Handcrank/Utilities.hpp"
-#include "Handcrank/VertexRenderObject.hpp"
+#include "HandcrankEngine/HandcrankEngine.hpp"
+#include "HandcrankEngine/Utilities.hpp"
+#include "HandcrankEngine/VertexRenderObject.hpp"
 
-using namespace Handcrank;
+using namespace HandcrankEngine;
 
 class TileMap : public VertexRenderObject
 {
