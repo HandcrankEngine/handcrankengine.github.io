@@ -11,7 +11,7 @@ export const getModifiedDate = async (path: string) => {
   return lastModified ? new Date(lastModified) : new Date();
 };
 
-export const getLastCommitDate = async (path: string) => {
+export const getLastCommitDate = async () => {
   const { stdout: lastModified } = await exec(
     `git log -1 --pretty="format:%ci"`
   );
