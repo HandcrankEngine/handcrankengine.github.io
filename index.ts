@@ -5,7 +5,7 @@ import hljs from 'highlight.js';
 import { html } from 'onlybuild';
 
 import renderMarkdown from './_utilities/render-markdown.js';
-import getModifiedDate from './_utilities/get-modified-date.js';
+import { getLastCommitDate } from './_utilities/get-modified-date.js';
 
 const renderDemo = async (name: string) => {
   return html`<div class="wrapper">
@@ -105,14 +105,11 @@ export default html`<!DOCTYPE html>
         <div class="wrapper">
           <p>
             Last Updated
-            ${(await getModifiedDate('./index.ts')).toLocaleDateString(
-              'en-us',
-              {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric'
-              }
-            )}
+            ${(await getLastCommitDate()).toLocaleDateString('en-us', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
           </p>
         </div>
       </footer>
