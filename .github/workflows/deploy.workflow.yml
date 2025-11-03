@@ -15,9 +15,6 @@ concurrency:
   group: 'pages'
   cancel-in-progress: true
 
-env:
-  EMSDK_VERSION: 4.0.18
-
 jobs:
   build-emscripten:
     runs-on: ubuntu-latest
@@ -27,20 +24,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Cache Emscripten
-        id: cache-emscripten
-        uses: actions/cache@v4
-        with:
-          path: ./emsdk
-          key: ${{ runner.os }}-emsdk-${{ env.EMSDK_VERSION }}
-
-      - name: Install Emscripten
-        if: steps.cache-emscripten.outputs.cache-hit != 'true'
-        run: |
-          git clone https://github.com/emscripten-core/emsdk.git
-          cd ./emsdk
-          ./emsdk install ${{ env.EMSDK_VERSION }}
-          ./emsdk activate ${{ env.EMSDK_VERSION }}
+      - uses: HandcrankEngine/install-emscripten-package@v0.1.0
 
       - name: Install HandcrankEngine
         run: |
@@ -48,7 +32,6 @@ jobs:
 
       - name: Build WebGL
         run: |
-          source ./emsdk/emsdk_env.sh
           build-demo() {
             NAME="${1}"
             emcc -std=c++17 -Os -o "demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" \
