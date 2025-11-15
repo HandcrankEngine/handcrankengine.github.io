@@ -1,5 +1,4 @@
 #include "Ghostscript_Tiger.h"
-#include "tilemap_packed.h"
 
 #include "HandcrankEngine/HandcrankEngine.hpp"
 #include "HandcrankEngine/ImageRenderObject.hpp"
