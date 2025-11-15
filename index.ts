@@ -98,6 +98,7 @@ export default html`<!DOCTYPE html>
         ${await renderDemoWithCode('drawRectRenderer')}
         ${await renderDemoWithCode('simpleEventLoop')}
         ${await renderDemoWithCode('spriteRenderer')}
+        ${await renderDemoWithCode('svg')}
         ${await renderDemoWithCode('animation')}
         ${await renderDemoWithCode('tiledMapSupport')}
       </main>
