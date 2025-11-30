@@ -9,7 +9,7 @@ auto game = std::make_unique<Game>();
 
 auto main(int argc, char *argv[]) -> int
 {
-    game->SetScreenSize(500, 300);
+    game->SetScreenSize(1000, 600);
 
     auto image = std::make_shared<ImageRenderObject>();
 

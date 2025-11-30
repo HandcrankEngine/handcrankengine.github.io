@@ -22,7 +22,7 @@ auto game = std::make_unique<Game>();
 
 auto main(int argc, char *argv[]) -> int
 {
-    game->SetScreenSize(500, 300);
+    game->SetScreenSize(1000, 600);
 
     game->AddChildObject(std::move(std::make_unique<LoopDebugger>()));
 

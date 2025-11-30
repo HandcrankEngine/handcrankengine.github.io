@@ -34,7 +34,7 @@ auto main(int argc, char *argv[]) -> int
 {
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
 
-    game->SetScreenSize(500, 300);
+    game->SetScreenSize(1000, 600);
 
     game->AddChildObject(std::move(std::make_unique<GreenAlien>()));
 
