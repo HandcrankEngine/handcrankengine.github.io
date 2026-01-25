@@ -4,10 +4,10 @@
 #include "HandcrankEngine/HandcrankEngine.hpp"
 #include "HandcrankEngine/VertexRenderObject.hpp"
 
-#include "./plugins/Tiled/Tiled.hpp"
+#include "Tiled/Tiled.hpp"
 
-#include "../images/tilemap.h"
-#include "../images/tilemap_json.h"
+#include "tilemap.h"
+#include "tilemap_json.h"
 
 using namespace HandcrankEngine;
 
