@@ -100,7 +100,7 @@ export default html`<!DOCTYPE html>
         ${await renderDemoWithCode('spriteRenderer')}
         ${await renderDemoWithCode('svg')}
         ${await renderDemoWithCode('animation')}
-        ${await renderDemoWithCode('tiledMapSupport')}
+        ${await renderDemoWithCode('tiledPlugin')}
       </main>
       <footer>
         <div class="wrapper">

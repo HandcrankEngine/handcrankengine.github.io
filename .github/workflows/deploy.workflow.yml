@@ -45,7 +45,7 @@ jobs:
           build-demo "simpleEventLoop"
           build-demo "spriteRenderer"
           build-demo "svg"
-          build-demo "tiledMapSupport"
+          build-demo "tiledPlugin"
 
       - name: Upload artifact
         uses: actions/upload-artifact@v5
