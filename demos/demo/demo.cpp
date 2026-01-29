@@ -33,8 +33,8 @@ class LogoScreenSaver : public ImageRenderObject
         LoadTexture(game->GetRenderer(), images_sdl_logo_png,
                     images_sdl_logo_png_len);
 
-        w = rect.w;
-        h = rect.h;
+        w = GetRect().w;
+        h = GetRect().h;
 
         minX = w / 2;
         minY = h / 2;
