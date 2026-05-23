@@ -3,6 +3,7 @@ services:
     build:
       context: .
       args:
+        EMSDK_VERSION: 5.0.7
         SDL_VERSION: 2.32.10
         SDL_IMAGE_VERSION: 2.8.12
         SDL_TTF_VERSION: 2.24.0
