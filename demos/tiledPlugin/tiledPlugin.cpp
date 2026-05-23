@@ -46,7 +46,7 @@ class TileMap : public VertexRenderObject
                     return 0;
                 }));
 
-            animator->AddDelay(1);
+            animator->AddDelay(1000);
         }
 
         AddChildObject(animator);
