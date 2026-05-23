@@ -32,16 +32,12 @@ jobs:
           SDL_TTF_VERSION: 2.24.0
           SDL_MIXER_VERSION: 2.8.2
 
-      - name: Install HandcrankEngine
-        run: |
-          git clone https://github.com/HandcrankEngine/HandcrankEngine.git
-
       - name: Build WebGL
         run: |
           build-demo() {
             NAME="${1}"
             emcc -std=c++17 -Os -o "demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" \
-              -I./include -I./HandcrankEngine/include \
+              -I./include \
               -I"${SDL_PATH}/include/SDL2" -L"${SDL_PATH}/lib" \
               -I"${SDL_IMAGE_PATH}/include/SDL2" -L"${SDL_IMAGE_PATH}/lib" \
               -I"${SDL_TTF_PATH}/include/SDL2" -L"${SDL_TTF_PATH}/lib" \
