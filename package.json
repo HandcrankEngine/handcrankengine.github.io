@@ -3,13 +3,13 @@
   "type": "module",
   "devDependencies": {
     "@types/node": "24.0.15",
-    "globby": "14.1.0",
+    "globby": "16.2.0",
     "highlight.js": "11.11.1",
     "marked": "16.1.1",
     "marked-footnote": "1.4.0",
-    "marked-highlight": "2.2.2",
-    "onlybuild": "1.6.6",
-    "yaml": "2.8.0"
+    "marked-highlight": "2.2.4",
+    "onlybuild": "2.1.0",
+    "yaml": "2.9.0"
   },
   "scripts": {
     "build": "onlybuild",
