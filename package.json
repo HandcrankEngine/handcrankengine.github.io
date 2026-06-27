@@ -5,7 +5,7 @@
     "@types/node": "24.0.15",
     "globby": "16.2.0",
     "highlight.js": "11.11.1",
-    "marked": "16.1.1",
+    "marked": "18.0.5",
     "marked-footnote": "1.4.0",
     "marked-highlight": "2.2.4",
     "onlybuild": "2.1.0",
