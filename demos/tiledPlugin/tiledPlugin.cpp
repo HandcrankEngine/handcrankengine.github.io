@@ -60,7 +60,7 @@ class TileMap : public VertexRenderObject
         for (const auto &tile : tiledLayer.tiles)
         {
             auto tileIndex = tile.tileID - 1;
-            auto srcX = (tileIndex % tilesPerCol) * tileWidth;
+            auto srcX = (tileIndex % (int)tilesPerCol) * tileWidth;
             auto srcY = (tileIndex / tilesPerCol) * tileHeight;
 
             auto screenX = (float)tile.x * tileWidth * scale;
@@ -71,7 +71,7 @@ class TileMap : public VertexRenderObject
                 {screenX, screenY, (float)tileWidth * scale,
                  (float)tileHeight * scale},
                 {(float)srcX, (float)srcY, (float)tileWidth, (float)tileHeight},
-                {255, 255, 255, 255}, textureWidth, textureHeight);
+                {1, 1, 1, 1}, textureWidth, textureHeight);
         }
     }
 };

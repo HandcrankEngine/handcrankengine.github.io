@@ -9,43 +9,58 @@
 
 #pragma once
 
-#include <SDL_mixer.h>
+#include <SDL3_mixer/SDL_mixer.h>
+
+#include "AudioCache.hpp"
 
 namespace HandcrankEngine
 {
 
-inline auto PlayMusic(Mix_Music *music) -> bool
+namespace
 {
-    if (music == nullptr)
+
+inline MIX_Track *musicTrack;
+
+inline MIX_Track *sfxTrack;
+
+} // namespace
+
+inline auto PlayMusic(MIX_Audio *audio) -> bool
+{
+    if (audio == nullptr)
     {
         return false;
     }
 
-    return Mix_PlayMusic(music, -1) == SDL_TRUE;
+    if (musicTrack == nullptr)
+    {
+        musicTrack = MIX_CreateTrack(mixer);
+    }
+
+    MIX_SetTrackAudio(musicTrack, audio);
+
+    return MIX_PlayTrack(musicTrack, 0);
 }
 
-inline auto PlaySFX(Mix_Chunk *sfx) -> bool
+inline auto PlaySFX(MIX_Audio *audio) -> bool
 {
-    if (sfx == nullptr)
+    if (audio == nullptr)
     {
         return false;
     }
 
-    return Mix_PlayChannel(-1, sfx, 0) == SDL_TRUE;
-}
-
-inline auto PlaySFXOnChannel(int channel, Mix_Chunk *sfx) -> bool
-{
-    if (sfx == nullptr)
+    if (sfxTrack == nullptr)
     {
-        return false;
+        sfxTrack = MIX_CreateTrack(mixer);
     }
 
-    return Mix_PlayChannel(channel, sfx, 0) == SDL_TRUE;
+    MIX_SetTrackAudio(sfxTrack, audio);
+
+    return MIX_PlayTrack(sfxTrack, 0);
 }
 
-inline void StopAllMusic() { Mix_HaltMusic(); }
+inline void StopAllMusic() { MIX_StopTrack(musicTrack, 0); }
 
-inline void StopAllSFX() { Mix_HaltChannel(-1); }
+inline void StopAllSFX() { MIX_StopTrack(sfxTrack, 0); }
 
 } // namespace HandcrankEngine

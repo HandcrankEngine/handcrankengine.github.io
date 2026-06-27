@@ -13,7 +13,7 @@ class GreenAlien : public SpriteRenderObject
         LoadTexture(game->GetRenderer(), images_alienGreen_png,
                     images_alienGreen_png_len);
 
-        SDL_SetTextureScaleMode(texture, SDL_ScaleMode::SDL_ScaleModeBest);
+        SDL_SetTextureScaleMode(texture, SDL_ScaleMode::SDL_SCALEMODE_PIXELART);
 
         SetAnchor(RectAnchor::HCENTER | RectAnchor::VCENTER);
 
@@ -32,8 +32,6 @@ auto game = std::make_unique<Game>();
 
 auto main(int argc, char *argv[]) -> int
 {
-    SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "2");
-
     game->SetScreenSize(1000, 600);
 
     game->AddChildObject(std::move(std::make_unique<GreenAlien>()));
