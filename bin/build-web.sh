@@ -9,6 +9,7 @@ build-demo() {
         -I./include \
         -I"${DEPS_PREFIX}"/include -L"${DEPS_PREFIX}"/lib \
         -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer \
+        -DCANVAS_SELECTOR="\"#${NAME}\"" \
         -s USE_FREETYPE=1 -s USE_HARFBUZZ=1 \
         -s MAX_WEBGL_VERSION=2 \
         -s MODULARIZE=1 -s EXPORT_NAME="${NAME}Module" --pre-js ./bin/sdl-mod.js

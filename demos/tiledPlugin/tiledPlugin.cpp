@@ -78,6 +78,10 @@ class TileMap : public VertexRenderObject
 
 auto main(int argc, char *argv[]) -> int
 {
+#ifdef __EMSCRIPTEN__
+    SDL_SetHint(SDL_HINT_EMSCRIPTEN_CANVAS_SELECTOR, CANVAS_SELECTOR);
+#endif
+
     auto game = std::make_unique<Game>();
 
     game->SetScreenSize(1000, 600);
