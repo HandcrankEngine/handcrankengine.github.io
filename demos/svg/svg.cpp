@@ -5,10 +5,10 @@
 
 using namespace HandcrankEngine;
 
-auto game = std::make_unique<Game>();
-
 auto main(int argc, char *argv[]) -> int
 {
+    auto game = std::make_unique<Game>();
+
     game->SetScreenSize(1000, 600);
 
     auto image = std::make_shared<ImageRenderObject>();

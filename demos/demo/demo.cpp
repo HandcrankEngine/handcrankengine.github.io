@@ -70,10 +70,10 @@ class LogoScreenSaver : public ImageRenderObject
     }
 };
 
-auto game = std::make_unique<Game>();
-
 auto main(int argc, char *argv[]) -> int
 {
+    auto game = std::make_unique<Game>();
+
     game->SetScreenSize(1000, 600);
 
     game->AddChildObject(std::move(std::make_unique<LogoScreenSaver>()));
