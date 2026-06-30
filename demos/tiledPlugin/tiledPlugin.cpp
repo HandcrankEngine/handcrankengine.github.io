@@ -28,6 +28,8 @@ class TileMap : public VertexRenderObject
         LoadTransparentTexture(game->GetRenderer(), images_tilemap_png,
                                images_tilemap_png_len, {0, 0, 0, 0});
 
+        SDL_SetTextureScaleMode(texture, SDL_ScaleMode::SDL_SCALEMODE_PIXELART);
+
         std::string jsonString(reinterpret_cast<char *>(images_tilemap_json),
                                images_tilemap_json_len);
 
