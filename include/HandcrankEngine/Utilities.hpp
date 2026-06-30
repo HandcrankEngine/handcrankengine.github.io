@@ -173,6 +173,13 @@ inline auto ToString(const SDL_FRect &rect) -> std::string
            std::to_string(rect.h) + ")";
 }
 
+inline auto operator+(const SDL_FRect &a, const SDL_FRect &b) -> SDL_FRect
+{
+    return {a.x + b.x, a.y + b.y, a.w + b.w, a.h + b.h};
+}
+
+inline SDL_FRect TextureQuadCenterOffset = {0.5F, 0.5F, -1.0F, -1.0F};
+
 inline auto GenerateTextureQuad(std::vector<SDL_Vertex> &vertices,
                                 std::vector<int> &indices,
                                 const SDL_FRect &destRect,
@@ -183,27 +190,31 @@ inline auto GenerateTextureQuad(std::vector<SDL_Vertex> &vertices,
     const size_t vertices_size = 4;
     const size_t indices_size = 6;
 
+    SDL_FRect srcRectWithOffset = srcRect + TextureQuadCenterOffset;
+
     auto index = vertices.size();
 
     vertices.reserve(vertices.size() + vertices_size);
 
+    vertices.emplace_back(SDL_Vertex{{destRect.x, destRect.y},
+                                     color,
+                                     {srcRectWithOffset.x / textureWidth,
+                                      srcRectWithOffset.y / textureHeight}});
     vertices.emplace_back(
-        SDL_Vertex{{destRect.x, destRect.y},
+        SDL_Vertex{{destRect.x + destRect.w, destRect.y},
                    color,
-                   {srcRect.x / textureWidth, srcRect.y / textureHeight}});
+                   {(srcRectWithOffset.x + srcRectWithOffset.w) / textureWidth,
+                    srcRectWithOffset.y / textureHeight}});
     vertices.emplace_back(SDL_Vertex{
-        {destRect.x + destRect.w, destRect.y},
+        {destRect.x + destRect.w, destRect.y + destRect.h},
         color,
-        {(srcRect.x + srcRect.w) / textureWidth, srcRect.y / textureHeight}});
-    vertices.emplace_back(
-        SDL_Vertex{{destRect.x + destRect.w, destRect.y + destRect.h},
-                   color,
-                   {(srcRect.x + srcRect.w) / textureWidth,
-                    (srcRect.y + srcRect.h) / textureHeight}});
+        {(srcRectWithOffset.x + srcRectWithOffset.w) / textureWidth,
+         (srcRectWithOffset.y + srcRectWithOffset.h) / textureHeight}});
     vertices.emplace_back(SDL_Vertex{
         {destRect.x, destRect.y + destRect.h},
         color,
-        {srcRect.x / textureWidth, (srcRect.y + srcRect.h) / textureHeight}});
+        {srcRectWithOffset.x / textureWidth,
+         (srcRectWithOffset.y + srcRectWithOffset.h) / textureHeight}});
 
     indices.reserve(indices.size() + indices_size);
 
