@@ -55,12 +55,12 @@ class TileMap : public VertexRenderObject
     void AddTileSet(const TiledLayer &tiledLayer, const int tileWidth,
                     const int tileHeight)
     {
-        auto tilesPerCol = textureWidth / tileWidth;
+        auto tilesPerCol = (int)textureWidth / tileWidth;
 
         for (const auto &tile : tiledLayer.tiles)
         {
             auto tileIndex = tile.tileID - 1;
-            auto srcX = (tileIndex % (int)tilesPerCol) * tileWidth;
+            auto srcX = (tileIndex % tilesPerCol) * tileWidth;
             auto srcY = (tileIndex / tilesPerCol) * tileHeight;
 
             auto screenX = (float)tile.x * tileWidth * scale;
