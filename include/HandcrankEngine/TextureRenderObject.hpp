@@ -19,6 +19,10 @@ namespace HandcrankEngine
 
 class TextureRenderObject : public RenderObject
 {
+  public:
+    inline static SDL_ScaleMode defaultScaleMode =
+        SDL_ScaleMode::SDL_SCALEMODE_PIXELART;
+
   protected:
     SDL_Texture *texture = nullptr;
 
@@ -37,6 +41,8 @@ class TextureRenderObject : public RenderObject
     {
         this->texture = texture;
 
+        SetScaleMode(defaultScaleMode);
+
         UpdateRectSizeFromTexture();
     }
 
@@ -49,6 +55,8 @@ class TextureRenderObject : public RenderObject
     void LoadTexture(SDL_Renderer *renderer, const char *path)
     {
         texture = LoadCachedTexture(renderer, path);
+
+        SetScaleMode(defaultScaleMode);
 
         UpdateRectSizeFromTexture();
     }
@@ -65,6 +73,8 @@ class TextureRenderObject : public RenderObject
     {
         texture = LoadCachedTransparentTexture(renderer, path, colorKey);
 
+        SetScaleMode(defaultScaleMode);
+
         UpdateRectSizeFromTexture();
     }
 
@@ -78,6 +88,8 @@ class TextureRenderObject : public RenderObject
     void LoadTexture(SDL_Renderer *renderer, const void *mem, int size)
     {
         texture = LoadCachedTexture(renderer, mem, size);
+
+        SetScaleMode(defaultScaleMode);
 
         UpdateRectSizeFromTexture();
     }
@@ -121,6 +133,11 @@ class TextureRenderObject : public RenderObject
         SDL_GetTextureSize(texture, &textureWidth, &textureHeight);
 
         SetDimension(textureWidth, textureHeight);
+    }
+
+    void SetScaleMode(SDL_ScaleMode scaleMode)
+    {
+        SDL_SetTextureScaleMode(texture, scaleMode);
     }
 };
 
