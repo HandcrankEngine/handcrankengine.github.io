@@ -2,13 +2,13 @@
   "name": "handcrankengine.com",
   "type": "module",
   "devDependencies": {
-    "@types/node": "24.0.15",
-    "globby": "16.2.0",
-    "highlight.js": "11.11.1",
-    "marked": "18.0.5",
+    "@types/node": "26.2.0",
+    "globby": "16.2.3",
+    "highlight.js": "11.12.0",
+    "marked": "18.0.9",
     "marked-footnote": "1.4.0",
     "marked-highlight": "2.2.4",
-    "onlybuild": "2.1.0",
+    "onlybuild": "2.2.0",
     "yaml": "2.9.0"
   },
   "scripts": {
