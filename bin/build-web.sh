@@ -5,8 +5,7 @@ build-demo() {
 
     mkdir -p "/tmp/dist/demos/${NAME}/"
 
-    emcc -std=c++17 -Os -o "/tmp/dist/demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" \
-        -I./include \
+    em++ -std=c++17 -Os -o "/tmp/dist/demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" -I./include \
         -I"${DEPS_PREFIX}"/include -L"${DEPS_PREFIX}"/lib \
         -lSDL3 -lSDL3_image -lSDL3_ttf -lSDL3_mixer \
         -DCANVAS_SELECTOR="\"#${NAME}\"" \

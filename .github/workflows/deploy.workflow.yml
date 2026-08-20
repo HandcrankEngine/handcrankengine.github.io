@@ -36,8 +36,7 @@ jobs:
         run: |
           build-demo() {
             NAME="${1}"
-            emcc -std=c++17 -Os -o "demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" \
-              -I./include \
+            em++ -std=c++17 -Os -o "demos/${NAME}/${NAME}.js" "demos/${NAME}/${NAME}.cpp" -I./include \
               -I"${SDL_PATH}/include" -L"${SDL_PATH}/lib" \
               -I"${SDL_IMAGE_PATH}/include" -L"${SDL_IMAGE_PATH}/lib" \
               -I"${SDL_TTF_PATH}/include" -L"${SDL_TTF_PATH}/lib" \
