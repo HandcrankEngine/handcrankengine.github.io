@@ -27,7 +27,7 @@ jobs:
       - uses: HandcrankEngine/install-sdl-packages@28e412ca7918a0341f2846f5181a097dfc2059be # v0.5.0
         with:
           BUILD_SDL_FOR_EMSCRIPTEN: true
-          SDL_VERSION: 3.4.10
+          SDL_VERSION: 3.4.14
           SDL_IMAGE_VERSION: 3.4.4
           SDL_TTF_VERSION: 3.2.2
           SDL_MIXER_VERSION: 3.2.4

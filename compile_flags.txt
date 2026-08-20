@@ -1,7 +1,7 @@
 -std=c++17
 -I./include
 -I../HandcrankEngine/include
--I/opt/homebrew/Cellar/sdl3/3.4.10/include
+-I/opt/homebrew/Cellar/sdl3/3.4.14/include
 -I/opt/homebrew/Cellar/sdl3_image/3.4.4/include
 -I/opt/homebrew/Cellar/sdl3_ttf/3.2.2/include
 -I/opt/homebrew/Cellar/sdl3_mixer/3.2.4/include
