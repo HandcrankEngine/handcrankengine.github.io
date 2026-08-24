@@ -20,6 +20,13 @@
 namespace HandcrankEngine
 {
 
+template <typename T>
+inline constexpr bool is_numeric_v =
+    (std::is_integral_v<T> || std::is_floating_point_v<T>) &&
+    !std::is_same_v<T, bool> && !std::is_same_v<T, char> &&
+    !std::is_same_v<T, wchar_t> && !std::is_same_v<T, char16_t> &&
+    !std::is_same_v<T, char32_t>;
+
 inline auto TryParseInt(const std::string &value, int &result) -> bool
 {
     try
@@ -91,30 +98,29 @@ inline auto InverseLerp(float a, float b, float v) -> float
     return std::clamp(((v - a) / (b - a)), 0.0F, 1.0F);
 }
 
-template <typename T> inline auto RandomNumberRange(T min, T max) -> T
+template <typename T, typename = std::enable_if_t<is_numeric_v<T>>>
+inline auto RandomNumberRange(T min, T max) -> T
 {
-    static std::random_device rd;
-    static std::mt19937 gen(rd());
+    thread_local std::random_device rd;
+    thread_local std::mt19937 gen(rd());
 
     if constexpr (std::is_floating_point_v<T>)
     {
-        std::uniform_real_distribution<T> distrib(min, max);
-        return distrib(gen);
+        return std::uniform_real_distribution<T>{min, max}(gen);
     }
     else
     {
-        std::uniform_int_distribution<T> distrib(min, max);
-        return distrib(gen);
+        return std::uniform_int_distribution{min, max}(gen);
     }
 }
 
 inline auto RandomColorRange(const SDL_Color min, const SDL_Color max)
     -> SDL_Color
 {
-    return SDL_Color{(Uint8)RandomNumberRange(min.r, max.r),
-                     (Uint8)RandomNumberRange(min.g, max.g),
-                     (Uint8)RandomNumberRange(min.b, max.b),
-                     (Uint8)RandomNumberRange(min.a, max.a)};
+    return SDL_Color{static_cast<Uint8>(RandomNumberRange(min.r, max.r)),
+                     static_cast<Uint8>(RandomNumberRange(min.g, max.g)),
+                     static_cast<Uint8>(RandomNumberRange(min.b, max.b)),
+                     static_cast<Uint8>(RandomNumberRange(min.a, max.a))};
 }
 
 inline auto RandomBoolean() -> bool { return rand() > (RAND_MAX / 2); }
@@ -178,7 +184,7 @@ inline auto operator+(const SDL_FRect &a, const SDL_FRect &b) -> SDL_FRect
     return {a.x + b.x, a.y + b.y, a.w + b.w, a.h + b.h};
 }
 
-inline SDL_FRect TextureQuadCenterOffset = {0.5F, 0.5F, -1.0F, -1.0F};
+inline SDL_FRect TextureQuadCenterOffset = {1.0F / 2, 1.0F / 2, -1.0F, -1.0F};
 
 inline auto GenerateTextureQuad(std::vector<SDL_Vertex> &vertices,
                                 std::vector<int> &indices,

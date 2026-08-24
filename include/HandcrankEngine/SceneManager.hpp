@@ -61,7 +61,7 @@ class SceneManager : public RenderObject
 
         auto it =
             std::find_if(scenes.begin(), scenes.end(),
-                         [](const std::shared_ptr<Scene> &scene)
+                         [](const std::shared_ptr<Scene> &scene) -> auto
                          { return dynamic_cast<T *>(scene.get()) != nullptr; });
 
         if (it != scenes.end())
@@ -91,7 +91,7 @@ class SceneManager : public RenderObject
                 {
                     auto it = std::find_if(
                         scenes.begin(), scenes.end(),
-                        [typeIndex](const std::shared_ptr<Scene> &scene)
+                        [typeIndex](const std::shared_ptr<Scene> &scene) -> bool
                         {
                             if (!scene)
                             {

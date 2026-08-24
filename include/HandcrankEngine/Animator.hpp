@@ -128,14 +128,14 @@ class Animator : public RenderObject
         float delayInSeconds = delayInMilliseconds / MILLISECONDS;
 
         AddAnimation(std::make_shared<Animation>(
-            [delayInSeconds](double deltaTime, double elapsedTime)
+            [delayInSeconds](double deltaTime, double elapsedTime) -> int
             { return elapsedTime > delayInSeconds ? 0 : 1; }));
     }
 
     void AddStep(const std::function<void()> &stepFunction)
     {
         AddAnimation(std::make_shared<Animation>(
-            [stepFunction](double deltaTime, double elapsedTime)
+            [stepFunction](double deltaTime, double elapsedTime) -> int
             {
                 stepFunction();
 

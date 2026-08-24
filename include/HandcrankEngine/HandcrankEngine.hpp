@@ -112,6 +112,8 @@ class Game : public InputHandler
     int width = DEFAULT_WINDOW_WIDTH;
     int height = DEFAULT_WINDOW_HEIGHT;
 
+    float renderScale = 1.0F / 2;
+
     bool focused = false;
 
 #ifdef HANDCRANK_ENGINE_DEBUG
@@ -146,7 +148,10 @@ class Game : public InputHandler
 
     inline void SetScreenSize(int _width, int _height);
 
-    inline void RecalculateScreenSize();
+    inline void SetRenderScale(float scale);
+    [[nodiscard]] inline auto GetRenderScale() const -> float;
+
+    inline void ApplyRenderScale();
 
     inline void SetTitle(const char *name);
 
@@ -246,8 +251,14 @@ class RenderObject : public std::enable_shared_from_this<RenderObject>
 
     inline RenderObject();
     inline RenderObject(Vector2 position);
-    inline RenderObject(float x, float y);
-    inline RenderObject(float x, float y, float w, float h);
+    template <typename T1, typename T2,
+              typename = std::enable_if_t<is_numeric_v<T1> && is_numeric_v<T2>>>
+    inline RenderObject(T1 x, T2 y);
+    template <
+        typename T1, typename T2, typename T3, typename T4,
+        typename = std::enable_if_t<is_numeric_v<T1> && is_numeric_v<T2> &&
+                                    is_numeric_v<T3> && is_numeric_v<T4>>>
+    inline RenderObject(T1 x, T2 y, T3 w, T4 h);
 
     virtual inline ~RenderObject();
 
@@ -466,12 +477,8 @@ inline auto Game::Setup() -> bool
         SDL_DestroyWindow(window);
     }
 
-#ifdef __EMSCRIPTEN__
-    window = SDL_CreateWindow("", width, height, SDL_WINDOW_OPENGL);
-#else
     window = SDL_CreateWindow(
         "", width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-#endif
 
     if (window == nullptr)
     {
@@ -512,27 +519,42 @@ inline void Game::SetScreenSize(int _width, int _height)
 
     SDL_SetWindowSize(window, _width, _height);
 
-    SDL_GetWindowSizeInPixels(window, &width, &height);
+    width = _width;
+    height = _height;
 
-    viewport.w = width;
-    viewport.h = height;
-    viewportf.w = static_cast<float>(viewport.w);
-    viewportf.h = static_cast<float>(viewport.h);
-
-    SDL_SetRenderScale(renderer, 1.0F, 1.0F);
-    SDL_SetRenderLogicalPresentation(
-        renderer, width, height,
-        SDL_RendererLogicalPresentation::SDL_LOGICAL_PRESENTATION_STRETCH);
-
-    SDL_SetRenderViewport(renderer, &viewport);
+    ApplyRenderScale();
 
     SDL_SetWindowPosition(window, SDL_WINDOWPOS_CENTERED,
                           SDL_WINDOWPOS_CENTERED);
 }
 
-inline void Game::RecalculateScreenSize()
+inline void Game::SetRenderScale(const float scale)
 {
-    SDL_GetWindowSizeInPixels(window, &width, &height);
+    renderScale = scale;
+
+    if (renderScale <= 0)
+    {
+        renderScale = 1.0F;
+    }
+
+    ApplyRenderScale();
+}
+
+inline auto Game::GetRenderScale() const -> float { return renderScale; }
+
+inline void Game::ApplyRenderScale()
+{
+    SDL_SetRenderLogicalPresentation(
+        renderer, width, height,
+        SDL_RendererLogicalPresentation::SDL_LOGICAL_PRESENTATION_LETTERBOX);
+
+    SDL_SetRenderScale(renderer, renderScale, renderScale);
+
+    viewportf.w = static_cast<float>(width) / renderScale;
+    viewportf.h = static_cast<float>(height) / renderScale;
+
+    viewport.w = static_cast<int>(viewportf.w);
+    viewport.h = static_cast<int>(viewportf.h);
 }
 
 inline void Game::SetTitle(const char *name)
@@ -614,11 +636,11 @@ inline void Game::Loop()
 #endif
 
     float elapsedSeconds = (frameStart - previousFrameStart) /
-                           (float)SDL_GetPerformanceFrequency();
+                           static_cast<float>(SDL_GetPerformanceFrequency());
 
     if (elapsedSeconds >= 1)
     {
-        fps = (int)(framesThisSecond / elapsedSeconds);
+        fps = static_cast<int>(framesThisSecond / elapsedSeconds);
         framesThisSecond = 0;
         previousFrameStart = frameStart;
     }
@@ -650,14 +672,6 @@ inline void Game::HandleInput()
         {
         case SDL_EVENT_QUIT:
             Quit();
-            break;
-
-        case SDL_EVENT_WINDOW_RESIZED:
-        case SDL_EVENT_WINDOW_RESTORED:
-        case SDL_EVENT_WINDOW_MAXIMIZED:
-        case SDL_EVENT_WINDOW_MINIMIZED:
-            SDL_GetWindowSizeInPixels(window, &width, &height);
-
             break;
 
         case SDL_EVENT_WINDOW_FOCUS_GAINED:
@@ -734,7 +748,8 @@ inline void Game::Render()
 
     sort(childrenBuffer.begin(), childrenBuffer.end(),
          [](const std::shared_ptr<RenderObject> &a,
-            const std::shared_ptr<RenderObject> &b) { return a->z < b->z; });
+            const std::shared_ptr<RenderObject> &b) -> bool
+         { return a->z < b->z; });
 
     for (const auto &child : childrenBuffer)
     {
@@ -756,7 +771,7 @@ inline void Game::ResolveCollisions()
 
     colliders.erase(
         std::remove_if(colliders.begin(), colliders.end(),
-                       [](const std::shared_ptr<RenderObject> &collider)
+                       [](const std::shared_ptr<RenderObject> &collider) -> bool
                        {
                            return !collider->IsCollisionEnabled() ||
                                   collider->HasBeenMarkedForDestroy();
@@ -798,7 +813,7 @@ inline void Game::DestroyChildObjects()
     }
 
     children.erase(std::remove_if(children.begin(), children.end(),
-                                  [](const auto &child)
+                                  [](const auto &child) -> auto
                                   {
                                       if (child != nullptr &&
                                           child->HasBeenMarkedForDestroy())
@@ -831,14 +846,17 @@ inline RenderObject::RenderObject(Vector2 position) : RenderObject()
 {
     SetPosition(position);
 }
-inline RenderObject::RenderObject(float x, float y) : RenderObject()
+
+template <typename T1, typename T2, typename Enable>
+inline RenderObject::RenderObject(T1 x, T2 y) : RenderObject()
 {
-    SetPosition(x, y);
+    SetPosition(static_cast<float>(x), static_cast<float>(y));
 }
-inline RenderObject::RenderObject(float x, float y, float w, float h)
-    : RenderObject()
+template <typename T1, typename T2, typename T3, typename T4, typename Enable>
+inline RenderObject::RenderObject(T1 x, T2 y, T3 w, T4 h) : RenderObject()
 {
-    SetRect(x, y, w, h);
+    SetRect(static_cast<float>(x), static_cast<float>(y), static_cast<float>(w),
+            static_cast<float>(h));
 }
 
 inline RenderObject::~RenderObject()
@@ -1295,7 +1313,8 @@ inline void RenderObject::Render(SDL_Renderer *renderer)
 
     sort(childrenBuffer.begin(), childrenBuffer.end(),
          [](const std::shared_ptr<RenderObject> &a,
-            const std::shared_ptr<RenderObject> &b) { return a->z < b->z; });
+            const std::shared_ptr<RenderObject> &b) -> bool
+         { return a->z < b->z; });
 
     for (const auto &child : childrenBuffer)
     {
@@ -1356,7 +1375,7 @@ inline void RenderObject::DestroyChildObjects()
     }
 
     children.erase(std::remove_if(children.begin(), children.end(),
-                                  [](const auto &child)
+                                  [](const auto &child) -> auto
                                   {
                                       if (child != nullptr &&
                                           child->HasBeenMarkedForDestroy())

@@ -121,7 +121,8 @@ void InputHandler::HandleInputPollEvent(const SDL_Event event)
     auto keyCode = event.key.key;
 
     auto mouseButtonIndex = event.button.button;
-    auto controllerButton = (SDL_GamepadButton)event.gbutton.button;
+    auto controllerButton =
+        static_cast<SDL_GamepadButton>(event.gbutton.button);
 
     switch (event.type)
     {
@@ -209,12 +210,13 @@ auto InputHandler::IsKeyDown(const std::vector<SDL_Keycode> &keyCodes) const
     -> bool
 {
     return std::any_of(keyCodes.begin(), keyCodes.end(),
-                       [this](SDL_Keycode val) { return IsKeyDown(val); });
+                       [this](SDL_Keycode val) -> bool
+                       { return IsKeyDown(val); });
 };
 
 auto InputHandler::IsAnyKeyPressed() const -> bool
 {
-    auto result = keyPressedState.size() > 0;
+    auto result = !keyPressedState.empty();
 
     return result;
 };
@@ -230,7 +232,8 @@ auto InputHandler::IsKeyPressed(const std::vector<SDL_Keycode> &keyCodes) const
     -> bool
 {
     return std::any_of(keyCodes.begin(), keyCodes.end(),
-                       [this](SDL_Keycode val) { return IsKeyPressed(val); });
+                       [this](SDL_Keycode val) -> bool
+                       { return IsKeyPressed(val); });
 };
 
 auto InputHandler::IsKeyReleased(const SDL_Keycode keyCode) const -> bool
@@ -244,7 +247,8 @@ auto InputHandler::IsKeyReleased(const std::vector<SDL_Keycode> &keyCodes) const
     -> bool
 {
     return std::any_of(keyCodes.begin(), keyCodes.end(),
-                       [this](SDL_Keycode val) { return IsKeyReleased(val); });
+                       [this](SDL_Keycode val) -> bool
+                       { return IsKeyReleased(val); });
 };
 
 auto InputHandler::GetMousePosition() const -> SDL_FPoint
@@ -285,13 +289,13 @@ auto InputHandler::IsControllerButtonDown(
     const std::vector<SDL_GamepadButton> &controllerButtons) const -> bool
 {
     return std::any_of(controllerButtons.begin(), controllerButtons.end(),
-                       [this](SDL_GamepadButton val)
+                       [this](SDL_GamepadButton val) -> bool
                        { return IsControllerButtonDown(val); });
 };
 
 auto InputHandler::IsAnyControllerButtonPressed() const -> bool
 {
-    auto result = controllerButtonPressedState.size() > 0;
+    auto result = !controllerButtonPressedState.empty();
 
     return result;
 };
@@ -308,7 +312,7 @@ auto InputHandler::IsControllerButtonPressed(
     const std::vector<SDL_GamepadButton> &controllerButtons) const -> bool
 {
     return std::any_of(controllerButtons.begin(), controllerButtons.end(),
-                       [this](SDL_GamepadButton val)
+                       [this](SDL_GamepadButton val) -> bool
                        { return IsControllerButtonPressed(val); });
 };
 
@@ -324,7 +328,7 @@ auto InputHandler::IsControllerButtonReleased(
     const std::vector<SDL_GamepadButton> &controllerButtons) const -> bool
 {
     return std::any_of(controllerButtons.begin(), controllerButtons.end(),
-                       [this](SDL_GamepadButton val)
+                       [this](SDL_GamepadButton val) -> bool
                        { return IsControllerButtonReleased(val); });
 };
 
