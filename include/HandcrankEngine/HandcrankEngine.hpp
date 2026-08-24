@@ -112,7 +112,7 @@ class Game : public InputHandler
     int width = DEFAULT_WINDOW_WIDTH;
     int height = DEFAULT_WINDOW_HEIGHT;
 
-    float renderScale = 1.0F / 2;
+    float renderScale = 1.0F;
 
     bool focused = false;
 
