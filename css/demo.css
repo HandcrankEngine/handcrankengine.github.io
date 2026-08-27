@@ -7,6 +7,7 @@
 .demo canvas {
   width: 100%;
   height: auto;
+  pointer-events: none;
 }
 
 .demo .demo-canvas-footer {
