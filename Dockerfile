@@ -1,59 +1,43 @@
 FROM ubuntu:latest
 
-ARG EMSDK_VERSION=5.0.7
+ARG EMSDK_VERSION=6.0.2
 ARG SDL_VERSION=3.4.14
 ARG SDL_IMAGE_VERSION=3.4.4
 ARG SDL_TTF_VERSION=3.2.2
 ARG SDL_MIXER_VERSION=3.2.4
 
-ARG DEPS_PREFIX="/build/dependencies"
+ENV DEPS_PREFIX=/usr/local
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update && apt-get upgrade -y
-
-RUN apt-get install -y \
-    curl \
+RUN apt-get update && apt-get install -y \
     build-essential \
-    pkg-config \
-    libpng-dev \
-    libjpeg-dev \
-    libtiff-dev \
-    libwebp-dev \
-    libfreetype-dev \
-    valgrind
-
-RUN apt-get install -y \
-    cmake \
     make \
+    cmake \
+    curl \
+    pkg-config \
     ninja-build \
-    gnome-desktop-testing \
     libasound2-dev \
-    libpulse-dev \
-    libaudio-dev \
+    libdbus-1-dev \
+    libdrm-dev \
+    libfreetype6-dev \
+    libgbm-dev \
+    libgles2-mesa-dev \
+    libharfbuzz-dev \
+    libibus-1.0-dev \
     libjack-dev \
+    libpulse-dev \
     libsndio-dev \
+    libudev-dev \
     libx11-dev \
-    libxext-dev \
-    libxrandr-dev \
     libxcursor-dev \
+    libxext-dev \
     libxfixes-dev \
     libxi-dev \
-    libxss-dev \
-    libxtst-dev \
     libxkbcommon-dev \
-    libdrm-dev \
-    libgbm-dev \
-    libgl1-mesa-dev \
-    libgles2-mesa-dev \
-    libegl1-mesa-dev \
-    libdbus-1-dev \
-    libibus-1.0-dev \
-    libudev-dev
-
-RUN apt-get install -y \
-    libfreetype6-dev \
-    libharfbuzz-dev
+    libxrandr-dev \
+    libxss-dev \
+    libxtst-dev && rm -rf /var/lib/apt/lists/*
 
 # Install Emscripten
 RUN mkdir -p /tmp/.emscripten && \
@@ -77,15 +61,16 @@ RUN mkdir -p /tmp/.sdl && \
     tar -xzvf SDL.tar.gz --strip-components=1 -C SDL-${SDL_VERSION} && \
     rm SDL.tar.gz && \
     cd SDL-${SDL_VERSION} && \
-    emcmake cmake -S . -B dist \
+    emcmake cmake -S . -B build \
         -DCMAKE_INSTALL_PREFIX="${DEPS_PREFIX}" \
         -DCMAKE_BUILD_TYPE=Release \
         -DSDL_SHARED=OFF \
         -DSDL_STATIC=ON \
         -DSDL_TESTS=OFF \
-        -DSDL_EXAMPLES=OFF && \
-    cmake --build dist -j$(nproc) && \
-    cmake --install dist
+        -DSDL_EXAMPLES=OFF \
+        -GNinja && \
+    cmake --build build -j$(nproc) && \
+    cmake --install build
 
 # Install SDL_image
 RUN mkdir -p /tmp/.sdl && \
@@ -95,15 +80,17 @@ RUN mkdir -p /tmp/.sdl && \
     tar -xzvf SDL_image.tar.gz --strip-components=1 -C SDL_image-${SDL_IMAGE_VERSION} && \
     rm SDL_image.tar.gz && \
     cd SDL_image-${SDL_IMAGE_VERSION} && \
-    emcmake cmake -S . -B dist \
+    emcmake cmake -S . -B build \
         -DCMAKE_INSTALL_PREFIX="${DEPS_PREFIX}" \
         -DSDL3_DIR="${DEPS_PREFIX}/lib/cmake/SDL3" \
+        -DSDL_STATIC_LIBS=ON \
         -DCMAKE_BUILD_TYPE=Release \
         -DSDL3IMAGE_SHARED=OFF \
         -DSDL3IMAGE_BUILD_SHARED_LIBS=OFF \
-        -DSDLIMAGE_SAMPLES=OFF && \
-    cmake --build dist -j$(nproc) && \
-    cmake --install dist
+        -DSDLIMAGE_SAMPLES=OFF \
+        -GNinja && \
+    cmake --build build -j$(nproc) && \
+    cmake --install build
 
 # Install SDL_ttf
 RUN mkdir -p /tmp/.sdl && \
@@ -114,17 +101,19 @@ RUN mkdir -p /tmp/.sdl && \
     rm SDL_ttf.tar.gz && \
     cd SDL_ttf-${SDL_TTF_VERSION} && \
     emcc --use-port=freetype --use-port=harfbuzz --version && \
-    emcmake cmake -S . -B dist \
+    emcmake cmake -S . -B build \
         -DCMAKE_INSTALL_PREFIX="${DEPS_PREFIX}" \
         -DSDL3_DIR="${DEPS_PREFIX}/lib/cmake/SDL3" \
+        -DSDL_STATIC_LIBS=ON \
         -DCMAKE_BUILD_TYPE=Release \
         -DSDL3TTF_SHARED=OFF \
         -DSDLTTF_SAMPLES=OFF \
         -DCMAKE_C_FLAGS="-sUSE_FREETYPE=1 -sUSE_HARFBUZZ=1" \
         -DCMAKE_CXX_FLAGS="-sUSE_FREETYPE=1 -sUSE_HARFBUZZ=1" \
-        -DSDL3TTF_HARFBUZZ=ON && \
-    cmake --build dist -j$(nproc) && \
-    cmake --install dist
+        -DSDL3TTF_HARFBUZZ=ON \
+        -GNinja && \
+    cmake --build build -j$(nproc) && \
+    cmake --install build
 
 # Install SDL_mixer
 RUN mkdir -p /tmp/.sdl && \
@@ -134,14 +123,16 @@ RUN mkdir -p /tmp/.sdl && \
     tar -xzvf SDL_mixer.tar.gz --strip-components=1 -C SDL_mixer-${SDL_MIXER_VERSION} && \
     rm SDL_mixer.tar.gz && \
     cd SDL_mixer-${SDL_MIXER_VERSION} && \
-    emcmake cmake -S . -B dist \
+    emcmake cmake -S . -B build \
         -DCMAKE_INSTALL_PREFIX="${DEPS_PREFIX}" \
         -DSDL3_DIR="${DEPS_PREFIX}/lib/cmake/SDL3" \
+        -DSDL_STATIC_LIBS=ON \
         -DCMAKE_BUILD_TYPE=Release \
         -DSDL3MIXER_SHARED=OFF \
-        -DSDLMIXER_SAMPLES=OFF && \
-    cmake --build dist -j$(nproc) && \
-    cmake --install dist
+        -DSDLMIXER_SAMPLES=OFF \
+        -GNinja && \
+    cmake --build build -j$(nproc) && \
+    cmake --install build
 
 WORKDIR /app
 
