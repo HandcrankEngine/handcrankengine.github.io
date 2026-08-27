@@ -1,0 +1,92 @@
+{"frames": [
+
+{
+	"filename": "climb-1.png",
+	"frame": {"x":0,"y":0,"w":66,"h":92},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":66,"h":92},
+	"sourceSize": {"w":66,"h":92}
+},
+{
+	"filename": "climb-2.png",
+	"frame": {"x":70,"y":0,"w":66,"h":92},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":66,"h":92},
+	"sourceSize": {"w":66,"h":92}
+},
+{
+	"filename": "duck.png",
+	"frame": {"x":140,"y":0,"w":69,"h":71},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":69,"h":71},
+	"sourceSize": {"w":69,"h":71}
+},
+{
+	"filename": "hurt.png",
+	"frame": {"x":210,"y":0,"w":69,"h":92},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":69,"h":92},
+	"sourceSize": {"w":69,"h":92}
+},
+{
+	"filename": "jump.png",
+	"frame": {"x":280,"y":0,"w":67,"h":93},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":67,"h":93},
+	"sourceSize": {"w":67,"h":93}
+},
+{
+	"filename": "stand.png",
+	"frame": {"x":350,"y":0,"w":66,"h":92},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":66,"h":92},
+	"sourceSize": {"w":66,"h":92}
+},
+{
+	"filename": "swim-1.png",
+	"frame": {"x":420,"y":0,"w":69,"h":95},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":69,"h":95},
+	"sourceSize": {"w":69,"h":95}
+},
+{
+	"filename": "swim-2.png",
+	"frame": {"x":490,"y":0,"w":70,"h":97},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":97},
+	"sourceSize": {"w":70,"h":97}
+},
+{
+	"filename": "walk-1.png",
+	"frame": {"x":560,"y":0,"w":68,"h":93},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":68,"h":93},
+	"sourceSize": {"w":68,"h":93}
+},
+{
+	"filename": "walk-2.png",
+	"frame": {"x":630,"y":0,"w":70,"h":96},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":70,"h":96},
+	"sourceSize": {"w":70,"h":96}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "alien.png",
+	"format": "RGBA8888",
+	"size": {"w":700,"h":97},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:c7b4f44712cc59c02f700825a10425dc:c6e37232154c983b0ea2788f6192e4da:f5c2820dc1d6657fd77f91f373566390$"
+}
+}

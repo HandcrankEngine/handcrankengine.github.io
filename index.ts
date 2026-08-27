@@ -101,6 +101,7 @@ export default html`<!DOCTYPE html>
         ${await renderDemoWithCode('svg')}
         ${await renderDemoWithCode('animation')}
         ${await renderDemoWithCode('tiledPlugin')}
+        ${await renderDemoWithCode('texturePackerPlugin')}
       </main>
       <footer>
         <div class="wrapper">
