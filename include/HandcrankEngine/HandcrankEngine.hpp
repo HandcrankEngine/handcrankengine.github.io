@@ -112,7 +112,7 @@ class Game : public InputHandler
     int width = DEFAULT_WINDOW_WIDTH;
     int height = DEFAULT_WINDOW_HEIGHT;
 
-    float renderScale = 1.0F;
+    float renderScale = 1.0F / 2;
 
     bool focused = false;
 
@@ -310,8 +310,14 @@ class RenderObject : public std::enable_shared_from_this<RenderObject>
 
     [[nodiscard]] inline auto GetRect() const -> const SDL_FRect &;
     inline void SetRect(const SDL_FRect &rect);
-    inline void SetRect(float x, float y, float w, float h);
-    inline void SetPosition(float x, float y);
+    template <
+        typename T1, typename T2, typename T3, typename T4,
+        typename = std::enable_if_t<is_numeric_v<T1> && is_numeric_v<T2> &&
+                                    is_numeric_v<T3> && is_numeric_v<T4>>>
+    inline void SetRect(T1 x, T2 y, T3 w, T4 h);
+    template <typename T1, typename T2,
+              typename = std::enable_if_t<is_numeric_v<T1> && is_numeric_v<T2>>>
+    inline void SetPosition(T1 x, T2 y);
     inline void SetPosition(Vector2 position);
     inline void SetDimension(float w, float h);
 
@@ -1114,21 +1120,23 @@ inline void RenderObject::SetRect(const SDL_FRect &rect)
     SetBoundingBoxAsDirty();
 }
 
-inline void RenderObject::SetRect(float x, float y, float w, float h)
+template <typename T1, typename T2, typename T3, typename T4, typename Enable>
+inline void RenderObject::SetRect(T1 x, T2 y, T3 w, T4 h)
 {
-    rect.x = x;
-    rect.y = y;
-    rect.w = w;
-    rect.h = h;
+    rect.x = static_cast<float>(x);
+    rect.y = static_cast<float>(y);
+    rect.w = static_cast<float>(w);
+    rect.h = static_cast<float>(h);
 
     SetTransformedRectAsDirty();
     SetBoundingBoxAsDirty();
 }
 
-inline void RenderObject::SetPosition(float x, float y)
+template <typename T1, typename T2, typename Enable>
+inline void RenderObject::SetPosition(T1 x, T2 y)
 {
-    rect.x = x;
-    rect.y = y;
+    rect.x = static_cast<float>(x);
+    rect.y = static_cast<float>(y);
 
     SetTransformedRectAsDirty();
     SetBoundingBoxAsDirty();

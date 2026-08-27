@@ -9,9 +9,6 @@
 
 #pragma once
 
-#include <filesystem>
-#include <iostream>
-
 #include <SDL3/SDL.h>
 #include <SDL3_ttf/SDL_ttf.h>
 
@@ -60,14 +57,9 @@ inline auto CleanupFontInits() -> void
 inline auto LoadCachedFont(const char *path, int ptSize = DEFAULT_FONT_SIZE)
     -> TTF_Font *
 {
-    if (!std::filesystem::exists(path))
-    {
-        std::cerr << "[Handcrank Engine] Font file not found: " << path << "\n";
+    const auto filePath = GetFilePath(path);
 
-        return nullptr;
-    }
-
-    auto cacheKey = std::hash<std::string_view>{}(std::string_view(path)) ^
+    auto cacheKey = std::hash<std::string_view>{}(std::string_view(filePath)) ^
                     std::hash<int>{}(ptSize);
 
     auto match = fontCache.find(cacheKey);
@@ -87,8 +79,8 @@ inline auto LoadCachedFont(const char *path, int ptSize = DEFAULT_FONT_SIZE)
         fontLoadedForFirstTime = true;
     }
 
-    auto font =
-        std::shared_ptr<TTF_Font>(TTF_OpenFont(path, ptSize), FontDeleter{});
+    auto font = std::shared_ptr<TTF_Font>(
+        TTF_OpenFont(filePath.c_str(), ptSize), FontDeleter{});
 
     if (font == nullptr)
     {

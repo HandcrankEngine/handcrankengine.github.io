@@ -9,9 +9,6 @@
 
 #pragma once
 
-#include <filesystem>
-#include <iostream>
-
 #include <SDL3/SDL.h>
 #include <SDL3_image/SDL_image.h>
 
@@ -50,15 +47,9 @@ inline auto ClearTextureCache() -> void { textureCache.clear(); }
 inline auto LoadCachedTexture(SDL_Renderer *renderer, const char *path)
     -> SDL_Texture *
 {
-    if (!std::filesystem::exists(path))
-    {
-        std::cerr << "[Handcrank Engine] Image file not found: " << path
-                  << "\n";
+    const auto filePath = GetFilePath(path);
 
-        return nullptr;
-    }
-
-    auto cacheKey = std::hash<std::string_view>{}(std::string_view(path));
+    auto cacheKey = std::hash<std::string_view>{}(std::string_view(filePath));
 
     auto match = textureCache.find(cacheKey);
 
@@ -67,7 +58,7 @@ inline auto LoadCachedTexture(SDL_Renderer *renderer, const char *path)
         return match->second.get();
     }
 
-    auto *surface = IMG_Load(path);
+    auto *surface = IMG_Load(filePath.c_str());
 
     if (surface == nullptr)
     {
@@ -102,15 +93,9 @@ inline auto LoadCachedTransparentTexture(SDL_Renderer *renderer,
                                          const SDL_Color colorKey)
     -> SDL_Texture *
 {
-    if (!std::filesystem::exists(path))
-    {
-        std::cerr << "[Handcrank Engine] Image file not found: " << path
-                  << "\n";
+    const auto filePath = GetFilePath(path);
 
-        return nullptr;
-    }
-
-    auto cacheKey = std::hash<std::string_view>{}(std::string_view(path));
+    auto cacheKey = std::hash<std::string_view>{}(std::string_view(filePath));
 
     auto match = textureCache.find(cacheKey);
 
@@ -119,7 +104,7 @@ inline auto LoadCachedTransparentTexture(SDL_Renderer *renderer,
         return match->second.get();
     }
 
-    auto *surface = IMG_Load(path);
+    auto *surface = IMG_Load(filePath.c_str());
 
     if (surface == nullptr)
     {

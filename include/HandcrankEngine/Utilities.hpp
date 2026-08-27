@@ -12,7 +12,9 @@
 #include <SDL3/SDL.h>
 
 #include <algorithm>
+#include <filesystem>
 #include <functional>
+#include <iostream>
 #include <random>
 #include <regex>
 #include <string>
@@ -108,9 +110,15 @@ inline auto RandomNumberRange(T min, T max) -> T
     {
         return std::uniform_real_distribution<T>{min, max}(gen);
     }
+    else if constexpr (std::is_signed_v<T>)
+    {
+        return static_cast<T>(
+            std::uniform_int_distribution<long long>{min, max}(gen));
+    }
     else
     {
-        return std::uniform_int_distribution{min, max}(gen);
+        return static_cast<T>(
+            std::uniform_int_distribution<unsigned long long>{min, max}(gen));
     }
 }
 
@@ -124,6 +132,33 @@ inline auto RandomColorRange(const SDL_Color min, const SDL_Color max)
 }
 
 inline auto RandomBoolean() -> bool { return rand() > (RAND_MAX / 2); }
+
+inline auto GetFilePath(const char *path) -> std::string
+{
+    const auto *basePath = SDL_GetBasePath();
+
+    std::filesystem::path fullPath = (basePath != nullptr) ? basePath : "";
+
+    if (path != nullptr)
+    {
+        std::filesystem::path relativePath(path);
+
+        fullPath /= relativePath.is_absolute() ? relativePath.relative_path()
+                                               : relativePath;
+    }
+
+    std::error_code ec;
+    auto resolvedPath = std::filesystem::canonical(fullPath, ec);
+
+    if (ec)
+    {
+        std::cerr << "[Handcrank Engine] File not found: " << fullPath << "\n";
+
+        return {};
+    }
+
+    return resolvedPath.string();
+}
 
 template <typename T> auto GetClassNameSimple(const T &obj) -> std::string
 {
