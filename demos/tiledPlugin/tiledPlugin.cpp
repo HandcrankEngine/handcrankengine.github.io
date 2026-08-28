@@ -25,13 +25,15 @@ class TileMap : public VertexRenderObject
 
     void Start() override
     {
-        LoadTransparentTexture(game->GetRenderer(), images_tilemap_png,
-                               images_tilemap_png_len, {0, 0, 0, 0});
+        LoadTransparentTexture(game->GetRenderer(),
+                               demos_tiledPlugin_tilemap_png,
+                               demos_tiledPlugin_tilemap_png_len, {0, 0, 0, 0});
 
         SDL_SetTextureScaleMode(texture, SDL_ScaleMode::SDL_SCALEMODE_PIXELART);
 
-        std::string jsonString(reinterpret_cast<char *>(images_tilemap_json),
-                               images_tilemap_json_len);
+        std::string jsonString(
+            reinterpret_cast<char *>(demos_tiledPlugin_tilemap_json),
+            demos_tiledPlugin_tilemap_json_len);
 
         tiledLayers = LoadTiledLayersFromString(jsonString);
 

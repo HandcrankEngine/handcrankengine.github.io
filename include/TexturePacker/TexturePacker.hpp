@@ -1,7 +1,6 @@
 // Copyright (c) Scott Doxey. All Rights Reserved. Licensed under the MIT
 // License. See LICENSE in the project root for license information.
 
-#include <fstream>
 #include <vector>
 
 #include <SDL3/SDL.h>
@@ -10,21 +9,14 @@
 
 using json = nlohmann::json;
 
-struct SpriteFrame
+inline auto LoadTexturePackerFramesFromMemory(const void *mem, std::size_t len,
+                                              const std::string &prefix = "")
+    -> std::vector<SDL_Rect>
 {
-    std::string filename;
-    SDL_Rect rect;
-};
+    std::vector<SDL_Rect> spriteFrames;
 
-inline auto LoadTexturePackerFramesFromFile(const std::string &path,
-                                            const std::string &prefix = "")
-    -> std::vector<SpriteFrame>
-{
-    std::vector<SpriteFrame> spriteFrames;
-
-    std::ifstream contents(path);
-
-    auto data = json::parse(contents);
+    auto data = json::parse(static_cast<const char *>(mem),
+                            static_cast<const char *>(mem) + len);
 
     if (data.contains("frames") && data["frames"].is_array())
     {
@@ -36,17 +28,32 @@ inline auto LoadTexturePackerFramesFromFile(const std::string &path,
             {
                 const auto &rect = frame.at("frame");
 
-                SpriteFrame frameData;
-
-                frameData.filename = filename;
-                frameData.rect = {
-                    rect.at("x").get<int>(), rect.at("y").get<int>(),
-                    rect.at("w").get<int>(), rect.at("h").get<int>()};
-
-                spriteFrames.emplace_back(frameData);
+                spriteFrames.emplace_back(
+                    SDL_Rect{rect.at("x").get<int>(), rect.at("y").get<int>(),
+                             rect.at("w").get<int>(), rect.at("h").get<int>()});
             };
         }
     }
+
+    return spriteFrames;
+}
+
+inline auto LoadTexturePackerFramesFromFile(const std::string &path,
+                                            const std::string &prefix = "")
+    -> std::vector<SDL_Rect>
+{
+    std::size_t len = 0;
+    void *mem = SDL_LoadFile(path.c_str(), &len);
+
+    if (mem == nullptr)
+    {
+        return {};
+    }
+
+    auto spriteFrames = LoadTexturePackerFramesFromMemory(
+        static_cast<const char *>(mem), len, prefix);
+
+    SDL_free(mem);
 
     return spriteFrames;
 }

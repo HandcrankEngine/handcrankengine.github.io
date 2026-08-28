@@ -10,14 +10,16 @@ class GreenAlien : public SpriteRenderObject
   public:
     void Start() override
     {
-        LoadTexture(game->GetRenderer(), images_alienGreen_png,
-                    images_alienGreen_png_len);
+        LoadTexture(game->GetRenderer(), demos_spriteRenderer_alienGreen_png,
+                    demos_spriteRenderer_alienGreen_png_len);
 
         SDL_SetTextureScaleMode(texture, SDL_ScaleMode::SDL_SCALEMODE_PIXELART);
 
         SetAnchor(RectAnchor::HCENTER | RectAnchor::VCENTER);
 
         SetPosition(game->GetWidth() / 2, game->GetHeight() / 2);
+
+        SetScale(2);
 
         SetFrameSpeed(0.25);
 

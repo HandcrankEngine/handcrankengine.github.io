@@ -19,12 +19,14 @@ auto main(int argc, char *argv[]) -> int
 
     auto image = std::make_shared<ImageRenderObject>();
 
-    image->LoadTexture(game->GetRenderer(), images_Ghostscript_Tiger_svg,
-                       images_Ghostscript_Tiger_svg_len);
+    image->LoadTexture(game->GetRenderer(), demos_svg_Ghostscript_Tiger_svg,
+                       demos_svg_Ghostscript_Tiger_svg_len);
 
     image->SetAnchor(RectAnchor::HCENTER | RectAnchor::VCENTER);
 
     image->SetPosition(game->GetWidth() / 2, game->GetHeight() / 2);
+
+    image->SetScale(0.65);
 
     game->AddChildObject(image);
 

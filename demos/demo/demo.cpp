@@ -30,8 +30,8 @@ class LogoScreenSaver : public ImageRenderObject
     {
         SetAnchor(RectAnchor::HCENTER | RectAnchor::VCENTER);
 
-        LoadTexture(game->GetRenderer(), images_sdl_logo_png,
-                    images_sdl_logo_png_len);
+        LoadTexture(game->GetRenderer(), demos_demo_sdl_logo_png,
+                    demos_demo_sdl_logo_png_len);
 
         w = GetRect().w;
         h = GetRect().h;
