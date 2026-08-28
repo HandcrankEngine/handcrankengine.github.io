@@ -54,6 +54,7 @@ inline auto CleanupFontInits() -> void
  * @param path File path to font file.
  * @param ptSize The size of the font.
  */
+
 inline auto LoadCachedFont(const char *path, int ptSize = DEFAULT_FONT_SIZE)
     -> TTF_Font *
 {
@@ -96,13 +97,14 @@ inline auto LoadCachedFont(const char *path, int ptSize = DEFAULT_FONT_SIZE)
  * Load font from a read-only buffer.
  *
  * @param mem A pointer to a read-only buffer.
- * @param size The buffer size, in bytes.
+ * @param len The buffer length.
  * @param ptSize The size of the font.
  */
-inline auto LoadCachedFont(const void *mem, int size,
+
+inline auto LoadCachedFont(const void *mem, int len,
                            int ptSize = DEFAULT_FONT_SIZE) -> TTF_Font *
 {
-    auto cacheKey = MemHash(mem, size) ^ std::hash<int>{}(ptSize);
+    auto cacheKey = MemHash(mem, len) ^ std::hash<int>{}(ptSize);
 
     auto match = fontCache.find(cacheKey);
 
@@ -121,7 +123,7 @@ inline auto LoadCachedFont(const void *mem, int size,
         fontLoadedForFirstTime = true;
     }
 
-    auto *rw = SDL_IOFromConstMem(mem, size);
+    auto *rw = SDL_IOFromConstMem(mem, len);
 
     if (rw == nullptr)
     {

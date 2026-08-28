@@ -98,10 +98,10 @@ inline auto LoadCachedMusic(const char *path) -> std::shared_ptr<MIX_Audio>
     return music;
 }
 
-inline auto LoadCachedMusic(const void *mem, int size)
+inline auto LoadCachedMusic(const void *mem, size_t len)
     -> std::shared_ptr<MIX_Audio>
 {
-    auto cacheKey = MemHash(mem, size);
+    auto cacheKey = MemHash(mem, len);
 
     auto match = audioCache.find(cacheKey);
 
@@ -115,7 +115,7 @@ inline auto LoadCachedMusic(const void *mem, int size)
         return nullptr;
     }
 
-    auto *rw = SDL_IOFromConstMem(mem, size);
+    auto *rw = SDL_IOFromConstMem(mem, len);
 
     if (rw == nullptr)
     {
@@ -166,10 +166,10 @@ inline auto LoadCachedSFX(const char *path) -> std::shared_ptr<MIX_Audio>
     return sfx;
 }
 
-inline auto LoadCachedSFX(const void *mem, int size)
+inline auto LoadCachedSFX(const void *mem, size_t len)
     -> std::shared_ptr<MIX_Audio>
 {
-    auto cacheKey = MemHash(mem, size);
+    auto cacheKey = MemHash(mem, len);
 
     auto match = audioCache.find(cacheKey);
 
@@ -183,7 +183,7 @@ inline auto LoadCachedSFX(const void *mem, int size)
         return nullptr;
     }
 
-    auto *rw = SDL_IOFromConstMem(mem, size);
+    auto *rw = SDL_IOFromConstMem(mem, len);
 
     if (rw == nullptr)
     {

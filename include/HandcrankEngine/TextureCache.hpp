@@ -136,12 +136,13 @@ inline auto LoadCachedTransparentTexture(SDL_Renderer *renderer,
  *
  * @param renderer A structure representing rendering state.
  * @param mem A pointer to a read-only buffer.
- * @param size The buffer size, in bytes.
+ * @param len The buffer length.
  */
-inline auto LoadCachedTexture(SDL_Renderer *renderer, const void *mem, int size)
-    -> SDL_Texture *
+
+inline auto LoadCachedTexture(SDL_Renderer *renderer, const void *mem,
+                              size_t len) -> SDL_Texture *
 {
-    auto cacheKey = MemHash(mem, size);
+    auto cacheKey = MemHash(mem, len);
 
     auto match = textureCache.find(cacheKey);
 
@@ -150,7 +151,7 @@ inline auto LoadCachedTexture(SDL_Renderer *renderer, const void *mem, int size)
         return match->second.get();
     }
 
-    auto *rw = SDL_IOFromConstMem(mem, size);
+    auto *rw = SDL_IOFromConstMem(mem, len);
 
     auto *surface = IMG_isSVG(rw) ? IMG_LoadSVG_IO(rw) : IMG_Load_IO(rw, true);
 
@@ -179,15 +180,16 @@ inline auto LoadCachedTexture(SDL_Renderer *renderer, const void *mem, int size)
  *
  * @param renderer A structure representing rendering state.
  * @param mem A pointer to a read-only buffer.
- * @param size The buffer size, in bytes.
+ * @param len The buffer length.
  * @param color The color to use as the transparent color key.
  */
+
 inline auto LoadCachedTransparentTexture(SDL_Renderer *renderer,
-                                         const void *mem, int size,
+                                         const void *mem, size_t len,
                                          const SDL_Color colorKey)
     -> SDL_Texture *
 {
-    auto cacheKey = MemHash(mem, size);
+    auto cacheKey = MemHash(mem, len);
 
     auto match = textureCache.find(cacheKey);
 
@@ -196,7 +198,7 @@ inline auto LoadCachedTransparentTexture(SDL_Renderer *renderer,
         return match->second.get();
     }
 
-    auto *rw = SDL_IOFromConstMem(mem, size);
+    auto *rw = SDL_IOFromConstMem(mem, len);
 
     auto *surface = IMG_isSVG(rw) ? IMG_LoadSVG_IO(rw) : IMG_Load_IO(rw, true);
 
